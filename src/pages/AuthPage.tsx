@@ -190,7 +190,7 @@ export default function AuthPage() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder="Enter your email"
                       className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
