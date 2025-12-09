@@ -404,8 +404,8 @@ export default function TasksPage() {
                         "bg-[#0a0a0a] border border-white/10 h-full flex flex-col justify-center transition-all duration-300 shadow-xl text-white",
                       )}
                     >
-                      <CardContent className="p-8">
-                        <div className="flex items-start gap-6">
+                      <CardContent className="p-4 sm:p-8">
+                        <div className="flex items-start gap-3 sm:gap-6">
                           <button
                             onClick={(e) => {
                               e.stopPropagation(); // Prevent triggering selection
@@ -417,69 +417,71 @@ export default function TasksPage() {
                               updateTaskStatus(task.id, nextStatus[task.status]);
                             }}
                             className={cn(
-                              "mt-1 p-2 rounded-full hover:bg-secondary transition-colors",
+                              "mt-1 p-1.5 sm:p-2 rounded-full hover:bg-secondary transition-colors",
                               statusConfig[task.status].color
                             )}
                           >
-                            <StatusIcon className="w-8 h-8" />
+                            <StatusIcon className="w-5 h-5 sm:w-8 sm:h-8" />
                           </button>
 
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-start justify-between gap-2 sm:gap-4">
                               <div>
                                 <h3 className={cn(
-                                  "text-2xl font-bold",
+                                  "text-lg sm:text-2xl font-bold leading-tight",
                                   task.status === 'done' && "line-through text-muted-foreground"
                                 )}>
                                   {task.title}
                                 </h3>
                                 {task.description && (
-                                  <p className="text-lg text-gray-300 mt-2 line-clamp-3">
+                                  <p className="text-sm sm:text-lg text-gray-300 mt-1 sm:mt-2 line-clamp-3">
                                     {task.description}
                                   </p>
                                 )}
                               </div>
 
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1 sm:gap-2">
                                 <Button
                                   variant="ghost"
                                   size="icon"
+                                  className="h-8 w-8 sm:h-auto sm:w-auto"
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     openEditDialog(task);
                                   }}
                                 >
-                                  <Pencil className="w-5 h-5" />
+                                  <Pencil className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </Button>
                                 <Button
                                   variant="ghost"
                                   size="icon"
+                                  className="h-8 w-8 sm:h-auto sm:w-auto"
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     deleteTask(task.id);
                                   }}
                                 >
-                                  <Trash2 className="w-5 h-5 text-destructive" />
+                                  <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-destructive" />
                                 </Button>
                               </div>
                             </div>
 
-                            <div className="flex flex-wrap items-center gap-3 mt-6">
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
                               <span className={cn(
-                                "text-sm px-3 py-1.5 rounded-full",
+                                "text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-1.5 rounded-full",
                                 priorityConfig[task.priority].color
                               )}>
                                 {priorityConfig[task.priority].label}
                               </span>
                               <span className={cn(
-                                "text-sm px-3 py-1.5 rounded-full bg-secondary",
+                                "text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-secondary",
                                 statusConfig[task.status].color
                               )}>
                                 {statusConfig[task.status].label}
                               </span>
                               {task.due_date && (
-                                <span className="text-sm text-muted-foreground flex items-center gap-2">
-                                  <Calendar className="w-4 h-4" />
+                                <span className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1.5 sm:gap-2">
+                                  <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                                   {new Date(task.due_date).toLocaleDateString()}
                                 </span>
                               )}
