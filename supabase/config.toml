@@ -1,0 +1,16 @@
+project_id = "dnffquvdxzahbkzwobsy"
+
+[functions.generate-plan]
+verify_jwt = true
+
+[functions.review-progress]
+verify_jwt = true
+
+[functions.index-note]
+verify_jwt = true
+
+[functions.delete-note-index]
+verify_jwt = true
+
+[functions.n8n-webhook]
+verify_jwt = false
