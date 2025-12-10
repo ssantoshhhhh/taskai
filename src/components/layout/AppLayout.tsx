@@ -7,6 +7,7 @@ import {
   FileText,
   Settings,
   LogOut,
+  LogIn,
 } from 'lucide-react';
 import { ChatWidget } from '@/components/chat/ChatWidget';
 import Dock from '@/components/ui/Dock';
@@ -17,7 +18,7 @@ interface AppLayoutProps {
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,7 +27,7 @@ export function AppLayout({ children }: AppLayoutProps) {
     navigate('/auth');
   };
 
-  const dockItems = [
+  const authenticatedDockItems = [
     {
       icon: <LayoutDashboard size={24} className="text-white" />,
       label: 'Dashboard',
@@ -57,6 +58,17 @@ export function AppLayout({ children }: AppLayoutProps) {
       onClick: handleSignOut
     },
   ];
+
+  const guestDockItems = [
+    {
+      icon: <LogIn size={24} className="text-green-400" />,
+      label: 'Login / Sign Up',
+      onClick: () => navigate('/auth'),
+      className: location.pathname === '/auth' ? 'bg-primary/20 border-primary' : ''
+    }
+  ];
+
+  const dockItems = user ? authenticatedDockItems : guestDockItems;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
