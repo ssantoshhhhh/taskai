@@ -2,7 +2,8 @@ import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle2, Zap, Brain, Shield, Clock } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Zap, Brain, Shield, Clock, UserPlus, CheckSquare, Sparkles, Rocket } from 'lucide-react';
+import Stepper, { Step } from '@/components/ui/Stepper';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -111,6 +112,67 @@ export default function LandingPage() {
               </motion.div>
             ))}
           </motion.div>
+        </section>
+
+        {/* How It Works Section */}
+        <section className="py-20 px-4">
+          <div className="text-center mb-16">
+            <motion.h2 {...fadeIn} className="text-3xl md:text-5xl font-bold mb-4 text-white">How It Works</motion.h2>
+            <motion.p {...fadeIn} className="text-gray-300 max-w-2xl mx-auto">Get started with Task AI in just a few simple steps.</motion.p>
+          </div>
+
+          <div className="max-w-4xl mx-auto bg-neutral-900/50 border border-white/5 rounded-3xl p-4 md:p-8">
+            <Stepper
+              initialStep={1}
+              onStepChange={(step: number) => {
+                console.log(step);
+              }}
+              onFinalStepCompleted={() => console.log("All steps completed!")}
+              backButtonText="Previous"
+              nextButtonText="Next"
+              stepCircleContainerClassName="shadow-none border-0 bg-transparent"
+              stepContainerClassName="bg-transparent mb-8"
+              contentClassName="min-h-[200px]"
+              footerClassName="bg-transparent"
+            >
+              <Step>
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <UserPlus className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">1. Create an Account</h2>
+                  <p className="text-gray-400 max-w-md mx-auto">Sign up for free to access your personalized dashboard. It only takes a few seconds to get started.</p>
+                </div>
+              </Step>
+              <Step>
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 bg-purple-500/20 text-purple-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckSquare className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">2. Add Your Tasks</h2>
+                  <p className="text-gray-400 max-w-md mx-auto">Input your daily tasks, deadlines, and priorities. Our AI will automatically organize them for you.</p>
+                </div>
+              </Step>
+              <Step>
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Sparkles className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">3. Generate Your Plan</h2>
+                  <p className="text-gray-400 max-w-md mx-auto">Let Task AI create an optimized schedule for your day, ensuring you focus on what matters most.</p>
+                </div>
+              </Step>
+              <Step>
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 bg-pink-500/20 text-pink-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Rocket className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">4. Achieve Flow State</h2>
+                  <p className="text-gray-400 max-w-md mx-auto">Follow your plan, track your progress, and enjoy a more productive, stress-free work day.</p>
+                </div>
+              </Step>
+            </Stepper>
+          </div>
         </section>
 
         {/* Showcase Section */}

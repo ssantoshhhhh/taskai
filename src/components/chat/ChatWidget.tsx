@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageCircle, X, Send, Loader2, Bot, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import botLogo from '../../assets/taskai-bot-removebg.png';
 
 // Types
 interface Message {
@@ -155,8 +156,8 @@ export function ChatWidget() {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="absolute inset-0 bg-cyan-500 blur-sm opacity-50 rounded-full"></div>
-                <div className="bg-black border border-white/20 p-2 rounded-full relative z-10">
-                  <Bot className="w-5 h-5 text-cyan-400" />
+                <div className="bg-white border border-white/20 p-1 rounded-full relative z-10">
+                  <img src={botLogo} alt="AI" className="w-8 h-8 object-contain" />
                 </div>
               </div>
               <div>
@@ -190,7 +191,7 @@ export function ChatWidget() {
                         msg.role === 'user' ? "bg-purple-600" : "bg-black"
                       )}
                     >
-                      {msg.role === 'user' ? <User className="w-4 h-4 text-white" /> : <Bot className="w-4 h-4 text-cyan-400" />}
+                      {msg.role === 'user' ? <User className="w-4 h-4 text-white" /> : <div className="p-1 bg-white rounded-full"><img src={botLogo} alt="AI" className="w-4 h-4 object-contain" /></div>}
                     </div>
 
                     <div className="flex flex-col gap-1 max-w-[80%]">
@@ -214,8 +215,8 @@ export function ChatWidget() {
                 {/* Typing Indicator */}
                 {isLoading && (
                   <div className="flex gap-3 animate-fade-in">
-                    <div className="w-8 h-8 rounded-full bg-black border border-white/10 flex items-center justify-center flex-shrink-0">
-                      <Bot className="w-4 h-4 text-cyan-400" />
+                    <div className="w-8 h-8 rounded-full bg-white border border-white/10 flex items-center justify-center flex-shrink-0 p-1">
+                      <img src={botLogo} alt="AI" className="w-6 h-6 object-contain" />
                     </div>
                     <div className="bg-white/5 border border-white/5 px-4 py-3 rounded-2xl rounded-tl-none flex items-center gap-1.5 h-[42px]">
                       <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
@@ -264,7 +265,7 @@ export function ChatWidget() {
             : "bg-gradient-to-r from-purple-600 to-pink-600 text-white animate-pulse-slow"
         )}
       >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
+        {isOpen ? <X className="w-6 h-6" /> : <img src={botLogo} alt="AI" className="w-10 h-10 object-contain drop-shadow-sm transition-transform hover:scale-110" />}
       </Button>
     </div>
   );
