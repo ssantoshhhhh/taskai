@@ -274,7 +274,7 @@ export default function LandingPage() {
               className="h-16 rounded-full px-12 text-xl bg-white text-black hover:bg-gray-200 font-bold transition-transform active:scale-95"
               onClick={() => navigate(user ? '/dashboard' : '/auth')}
             >
-              {user ? 'Go to Dashboard' : 'Get Started for Free'}
+              {user ? 'Go to Dashboard' : 'Login to Continue'}
             </Button>
           </motion.div>
         </section>
