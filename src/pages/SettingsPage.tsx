@@ -70,32 +70,48 @@ export default function SettingsPage() {
     }
   };
 
+  const getWorkHoursLabel = (val: string) => {
+    switch (val) {
+      case '9-5': return '9 AM - 5 PM';
+      case '8-4': return '8 AM - 4 PM';
+      case '10-6': return '10 AM - 6 PM';
+      case 'flexible': return 'Flexible';
+      case 'night': return 'Night Shift';
+      default: return 'Not set';
+    }
+  };
+
+  const getFocusStyleLabel = (val: string) => {
+    if (!val) return 'Not set';
+    return val.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  };
+
   const cardData = [
     {
       color: '#0a0a0a',
       title: 'Profile',
-      description: 'Update name & email',
+      description: profile?.name || 'Update name & email',
       label: 'Account',
       onClick: () => setActiveDialog('profile')
     },
     {
       color: '#0a0a0a',
       title: 'Work Hours',
-      description: 'Set your availability',
+      description: getWorkHoursLabel(profile?.work_hours || ''),
       label: 'Preferences',
       onClick: () => setActiveDialog('work')
     },
     {
       color: '#0a0a0a',
       title: 'Focus Style',
-      description: 'Configure AI assistant',
+      description: getFocusStyleLabel(profile?.focus_style || ''),
       label: 'AI Behavior',
       onClick: () => setActiveDialog('focus')
     },
     {
       color: '#0a0a0a',
       title: 'Notifications',
-      description: 'Manage alerts & reminders',
+      description: profile?.reminder_time ? `Daily at ${profile.reminder_time}` : 'Not set',
       label: 'Alerts',
       onClick: () => setActiveDialog('notifications')
     }

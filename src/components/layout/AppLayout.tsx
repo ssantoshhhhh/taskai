@@ -73,22 +73,21 @@ export function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
       {/* Background Animation - Same as Login Page */}
-      {/* Background Animation - Hidden on mobile for performance, generic for non-landing pages */}
-      {location.pathname !== '/' && (
-        <div className="absolute inset-0 z-0 pointer-events-none hidden md:block">
-          <FloatingLines
-            enabledWaves={['top', 'middle', 'bottom']}
-            lineCount={[10, 15, 20]}
-            lineDistance={[8, 6, 4]}
-            bendRadius={5.0}
-            bendStrength={-0.5}
-            interactive={true}
-            parallax={true}
-            linesGradient={['#ff00ff', '#0000ff']}
-            mixBlendMode="screen"
-          />
-        </div>
-      )}
+      {/* Background Animation */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <FloatingLines
+          enabledWaves={['top', 'middle', 'bottom']}
+          lineCount={[10, 15, 20]}
+          lineDistance={[8, 6, 4]}
+          bendRadius={5.0}
+          bendStrength={-0.5}
+          interactive={true}
+          parallax={true}
+          linesGradient={[]}
+          topWavePosition={{ x: 10, y: 0.5, rotate: -0.4 }}
+          middleWavePosition={{ x: 5, y: 0, rotate: 0.2 }}
+        />
+      </div>
 
       {/* Main Content */}
       <main className="min-h-screen pb-24 relative z-10">

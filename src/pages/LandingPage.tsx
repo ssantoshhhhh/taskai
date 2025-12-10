@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle2, Zap, Brain, Shield, Clock, UserPlus, CheckSquare, Sparkles, Rocket } from 'lucide-react';
-import FloatingLines from '@/components/ui/FloatingLines';
 import Stepper, { Step } from '@/components/ui/Stepper';
 
 export default function LandingPage() {
@@ -29,22 +28,6 @@ export default function LandingPage() {
 
   return (
     <AppLayout>
-      {/* Full Page Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <FloatingLines
-          enabledWaves={['top', 'middle', 'bottom']}
-          lineCount={[10, 15, 20]}
-          lineDistance={[8, 6, 4]}
-          bendRadius={5.0}
-          bendStrength={-0.5}
-          interactive={true}
-          parallax={true}
-          linesGradient={[]}
-          topWavePosition={{ x: 10, y: 0.5, rotate: -0.4 }}
-          middleWavePosition={{ x: 5, y: 0, rotate: 0.2 }}
-        />
-      </div>
-
       <div className="relative z-10 max-w-7xl mx-auto space-y-24 md:space-y-32 pb-20 overflow-x-hidden">
 
         {/* Hero Section */}
@@ -286,6 +269,6 @@ export default function LandingPage() {
         </section>
 
       </div>
-    </AppLayout>
+    </AppLayout >
   );
 }
