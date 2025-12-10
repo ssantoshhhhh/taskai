@@ -8,6 +8,7 @@ import {
   Settings,
   LogOut,
   LogIn,
+  Home,
 } from 'lucide-react';
 import { ChatWidget } from '@/components/chat/ChatWidget';
 import Dock from '@/components/ui/Dock';
@@ -28,6 +29,12 @@ export function AppLayout({ children }: AppLayoutProps) {
   };
 
   const authenticatedDockItems = [
+    {
+      icon: <Home size={24} className="text-white" />,
+      label: 'Home',
+      onClick: () => navigate('/'),
+      className: location.pathname === '/' ? 'bg-primary/20 border-primary' : ''
+    },
     {
       icon: <LayoutDashboard size={24} className="text-white" />,
       label: 'Dashboard',
@@ -60,6 +67,12 @@ export function AppLayout({ children }: AppLayoutProps) {
   ];
 
   const guestDockItems = [
+    {
+      icon: <Home size={24} className="text-white" />,
+      label: 'Home',
+      onClick: () => navigate('/'),
+      className: location.pathname === '/' ? 'bg-primary/20 border-primary' : ''
+    },
     {
       icon: <LogIn size={24} className="text-green-400" />,
       label: 'Login / Sign Up',

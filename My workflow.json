@@ -1,0 +1,335 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "You are a website Support agent\n\nYou have a number of tools at your disposal\n\n1. Send Email use this tool to send an email to the customer team with the name and mail address of the person who raise a issue\n\n2. RAG Question Use this tool for general business FAQ questions."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0ce4cdb5-1d06-4de0-8fa5-ea4138bd810e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sendTo": "srkrcsdcsitleavemanagement@gmail.com",
+        "subject": "New Support Request",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        288
+      ],
+      "id": "5a725977-2d56-4ba0-8677-7532e0f9d04b",
+      "name": "Send a message in Gmail",
+      "webhookId": "30a55307-c5a6-400b-8599-8b8c5b6f5788",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "UL9PhKYfyZdD2RRP",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://prod-1-data.ke.pinecone.io/assistant/chat/rag-agent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Api-Key",
+              "value": "pcsk_4ZH4bE_DJ1J6dpsBkwFYULSEhXs6NXzskgHbVSUkDe3GydyUUoDnNh4ZAJ3fCV31Jr2yk8"
+            },
+            {
+              "name": "X-Pinecone-Api-Version",
+              "value": "2025-10"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "JSON",
+        "body": "={\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.body.message }}\"\n    }\n  ],\n  \"stream\": false,\n  \"model\": \"gpt-4o\"\n}\n",
+        "options": {},
+        "optimizeResponse": true
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        448,
+        304
+      ],
+      "id": "9eeae01c-14c5-4290-9e5f-547f7da593c3",
+      "name": "RAG"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        304
+      ],
+      "id": "51eb26f6-2d1c-494f-aabf-ecf44ee18823",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "sG3URNY7bhevcFdj",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Mail it going to \nsrkrcsdcsitleavemanagement",
+        "height": 80
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        144,
+        448
+      ],
+      "id": "be550a87-29e2-4071-aef5-efa4b8457631",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Update PineCone API after new keeping new data\n",
+        "height": 80
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        432,
+        448
+      ],
+      "id": "de4e1f90-2c7f-4865-87ec-932831e0fbfe",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "multipleMethods": true,
+        "httpMethod": [
+          "POST"
+        ],
+        "path": "ed13b18f-676f-4673-8a58-1c492a56bbdc",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -368,
+        16
+      ],
+      "id": "c3383764-a001-4afb-9241-5ea7484f29ba",
+      "name": "Webhook",
+      "webhookId": "ed13b18f-676f-4673-8a58-1c492a56bbdc",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.message }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        288
+      ],
+      "id": "1f0dcfae-a0d5-45fe-805c-195492caf3e6",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "WBiNFM5C7Pa3HuFE",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "75b08d13-7cec-48f9-906b-ced630965d22",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Always use this tool to find information in the user's notes.",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "ragbot",
+          "mode": "list",
+          "cachedResultName": "ragbot"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        832,
+        224
+      ],
+      "id": "721c6a06-bda1-4f79-9db6-859ba2b4a9aa",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "TqQHTpAkKt0lh7yI",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        928,
+        416
+      ],
+      "id": "3f485006-34e2-416e-9ecb-63ab055298aa",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "oVu8smlP3QoRnQLJ",
+          "name": "Google Gemini(PaLM) Api account 5"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAG": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "63bef02e-2a61-48d5-8ecd-3ee25cb2b066",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ddff52c617a1cb1a142cce8510db19c5ba46406a91c5802edddd733a24fcfd03"
+  },
+  "id": "DaL2ybkTqQrjhTzV",
+  "tags": []
+}
