@@ -10,6 +10,7 @@ import DashboardPage from "./pages/DashboardPage";
 import TasksPage from "./pages/TasksPage";
 import NotesPage from "./pages/NotesPage";
 import SettingsPage from "./pages/SettingsPage";
+import LandingPage from "./pages/LandingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,7 +23,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/dashboard" element={
               <ProtectedRoute>
