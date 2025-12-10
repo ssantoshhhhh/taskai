@@ -8,10 +8,10 @@ export default function LandingPage() {
   const navigate = useNavigate();
 
   const fadeIn = {
-    initial: { opacity: 0, y: 30 },
+    initial: { opacity: 0, y: 10 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: "-100px" },
-    transition: { duration: 0.7, ease: "easeOut" as const }
+    viewport: { once: true, margin: "-10%" },
+    transition: { duration: 0.5, ease: "easeOut" }
   };
 
   const staggerContainer = {
@@ -19,46 +19,46 @@ export default function LandingPage() {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
+        staggerChildren: 0.1,
+        delayChildren: 0.1
       }
     }
   };
 
   return (
     <AppLayout>
-      <div className="max-w-7xl mx-auto space-y-32 pb-20 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto space-y-24 md:space-y-32 pb-20 overflow-x-hidden">
 
         {/* Hero Section */}
-        <section className="relative pt-10 md:pt-20 text-center space-y-8 min-h-[60vh] flex flex-col justify-center items-center">
-          {/* Decorative blurred spots */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px] -z-10" />
-          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-purple-500/10 rounded-full blur-[100px] -z-10" />
+        <section className="relative pt-10 md:pt-20 text-center space-y-8 min-h-[60vh] flex flex-col justify-center items-center px-4">
+          {/* Decorative Backgrounds - Simple Gradients */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-[radial-gradient(circle,rgba(6,182,212,0.1)_0%,transparent_70%)] -z-10 pointer-events-none" />
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
-            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            transition={{ duration: 1.2, ease: "circOut" }}
-            className="relative z-10 max-w-4xl"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative z-10 max-w-4xl will-change-transform"
           >
-            <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-white/10 bg-white/5 text-sm text-cyan-300 font-medium backdrop-blur-md">
+            <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-white/10 bg-white/5 text-sm text-cyan-300 font-medium">
               ✨ The Next Gen Task Management
             </div>
-            <h1 className="text-5xl md:text-8xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40 pb-4 leading-tight">
+            <h1 className="text-4xl md:text-8xl font-bold tracking-tight text-white pb-4 leading-tight">
               Master Your Time.<br />
               <span className="text-cyan-400">Amplify Focus.</span>
             </h1>
-            <p className="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto mt-6 leading-relaxed">
+            <p className="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto mt-4 leading-relaxed">
               Uses advanced AI to organize your tasks, schedule your day, and help you achieve flow state effortlessly.
             </p>
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="flex flex-col sm:flex-row justify-center gap-4 mt-12"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="flex flex-col sm:flex-row justify-center gap-4 mt-8 md:mt-12"
             >
               <Button
                 size="lg"
-                className="h-14 rounded-full px-10 text-lg bg-cyan-500 hover:bg-cyan-400 text-black font-bold shadow-lg shadow-cyan-500/25 transition-all hover:scale-105"
+                className="h-14 rounded-full px-10 text-lg bg-cyan-500 hover:bg-cyan-400 text-black font-bold shadow-lg shadow-cyan-500/25 transition-transform active:scale-95"
                 onClick={() => navigate('/auth')}
               >
                 Get Started Now <ArrowRight className="ml-2 w-5 h-5" />
@@ -66,7 +66,7 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="h-14 rounded-full px-10 text-lg border-white/10 bg-white/5 hover:bg-white/10 text-white backdrop-blur-sm transition-all hover:scale-105"
+                className="h-14 rounded-full px-10 text-lg border-white/10 bg-white/5 hover:bg-white/10 text-white backdrop-blur-md transition-transform active:scale-95"
                 onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Learn More
@@ -76,9 +76,9 @@ export default function LandingPage() {
         </section>
 
         {/* Features Grid */}
-        <section id="features" className="relative">
-          <div className="text-center mb-16">
-            <motion.h2 {...fadeIn} className="text-3xl md:text-5xl font-bold mb-4">Powerful Features</motion.h2>
+        <section id="features" className="relative px-4">
+          <div className="text-center mb-10 md:mb-16">
+            <motion.h2 {...fadeIn} className="text-3xl md:text-5xl font-bold mb-4 text-white">Powerful Features</motion.h2>
             <motion.p {...fadeIn} className="text-gray-400 max-w-2xl mx-auto">Everything you need to stay productive, supercharged by AI.</motion.p>
           </div>
 
@@ -86,7 +86,7 @@ export default function LandingPage() {
             variants={staggerContainer}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-10%" }}
             className="grid md:grid-cols-3 gap-6"
           >
             {[
@@ -97,13 +97,13 @@ export default function LandingPage() {
               <motion.div
                 key={i}
                 variants={{
-                  hidden: { opacity: 0, y: 30 },
-                  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 50, damping: 20 } }
+                  hidden: { opacity: 0, y: 10 },
+                  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 50, damping: 15 } }
                 }}
-                className="group p-8 rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-cyan-500/30 hover:bg-neutral-900/80 transition-all duration-300 relative overflow-hidden"
+                className="group p-8 rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-cyan-500/30 transition-colors duration-300 relative overflow-hidden"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="w-14 h-14 bg-neutral-800 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/5">
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className="w-14 h-14 bg-neutral-800 rounded-2xl flex items-center justify-center mb-6 border border-white/5">
                   <feature.icon className="w-7 h-7 text-cyan-400" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-3 relative z-10">{feature.title}</h3>
@@ -114,16 +114,16 @@ export default function LandingPage() {
         </section>
 
         {/* Showcase Section */}
-        <section className="grid md:grid-cols-2 gap-16 items-center py-20">
-          <motion.div {...fadeIn} className="space-y-8 order-2 md:order-1">
-            <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
-              Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">High Performers</span>
+        <section className="grid md:grid-cols-2 gap-12 md:gap-16 items-center py-10 md:py-20 px-4">
+          <motion.div {...fadeIn} className="space-y-6 md:space-y-8 order-2 md:order-1">
+            <h2 className="text-3xl md:text-6xl font-bold text-white leading-tight">
+              Built for <span className="text-cyan-400">High Performers</span>
             </h2>
-            <p className="text-xl text-gray-400 leading-relaxed">
-              TaskWeaver isn't just a todo list. It's a complete productivity system designed to help you achieve more with less stress.
+            <p className="text-lg md:text-xl text-gray-400 leading-relaxed">
+              Task AI isn't just a todo list. It's a complete productivity system designed to help you achieve more with less stress.
             </p>
 
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               {[
                 { title: "Smart Prioritization", desc: "Automatically sorts tasks based on urgency and impact." },
                 { title: "Daily Review", desc: "End your day with AI-generated insights and summaries." },
@@ -131,10 +131,10 @@ export default function LandingPage() {
               ].map((item, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: i * 0.1, duration: 0.4 }}
                   className="flex gap-4"
                 >
                   <div className="mt-1">
@@ -142,7 +142,7 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-white">{item.title}</h4>
-                    <p className="text-gray-400">{item.desc}</p>
+                    <p className="text-gray-400 text-sm md:text-base">{item.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -150,14 +150,14 @@ export default function LandingPage() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             className="relative order-1 md:order-2"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 blur-3xl rounded-full animate-pulse" />
-            <div className="relative bg-[#0F0F0F] border border-white/10 rounded-2xl p-6 shadow-2xl skew-y-1 transform transition-transform hover:skew-y-0 duration-500">
+            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-purple-500/10 blur-[40px] rounded-full pointer-events-none" />
+            <div className="relative bg-[#0F0F0F] border border-white/10 rounded-2xl p-6 shadow-2xl">
               {/* Mock Card UI */}
               <div className="flex items-center gap-4 mb-6 border-b border-white/5 pb-4">
                 <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold">AI</div>
@@ -177,33 +177,28 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-6 flex justify-center">
-                <div className="h-8 w-32 bg-cyan-500/20 rounded-full flex items-center justify-center text-xs text-cyan-400 font-bold">
-                  View Full Schedule
-                </div>
-              </div>
             </div>
           </motion.div>
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 text-center">
+        <section className="py-10 md:py-20 text-center px-4">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="bg-gradient-to-b from-neutral-900 to-black border border-white/10 rounded-3xl p-12 md:p-24 relative overflow-hidden"
+            transition={{ duration: 0.5 }}
+            className="bg-neutral-900 border border-white/10 rounded-3xl p-10 md:p-24 relative overflow-hidden"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
 
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">Ready to take control?</h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-              Join thousands of users who have transformed their productivity with TaskWeaver.
+            <h2 className="text-3xl md:text-6xl font-bold text-white mb-6">Ready to take control?</h2>
+            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+              Join thousands of users who have transformed their productivity with Task AI.
             </p>
             <Button
               size="lg"
-              className="h-16 rounded-full px-12 text-xl bg-white text-black hover:bg-gray-200 font-bold transition-transform hover:scale-105"
+              className="h-16 rounded-full px-12 text-xl bg-white text-black hover:bg-gray-200 font-bold transition-transform active:scale-95"
               onClick={() => navigate('/auth')}
             >
               Get Started for Free

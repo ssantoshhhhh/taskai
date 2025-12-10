@@ -61,7 +61,8 @@ export function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
       {/* Background Animation - Same as Login Page */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Background Animation - Hidden on mobile for performance */}
+      <div className="absolute inset-0 z-0 pointer-events-none hidden md:block">
         <FloatingLines
           enabledWaves={['top', 'middle', 'bottom']}
           lineCount={[10, 15, 20]}
