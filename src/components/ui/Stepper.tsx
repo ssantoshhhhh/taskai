@@ -55,89 +55,110 @@ export default function Stepper({
       className={`w-full max-w-3xl mx-auto ${stepCircleContainerClassName}`}
       {...rest}
     >
-      <div className={`${stepContainerClassName} flex w-full items-center justify-between mb-8 px-4 relative`}>
-        {/* Background line for connection */}
-        <div className="absolute top-1/2 left-4 right-4 h-[2px] bg-white/20 -z-10 -translate-y-1/2 rounded-full" />
+      {!isCompleted ? (
+        <React.Fragment>
+          <div className={`${stepContainerClassName} flex w-full items-center justify-between mb-8 px-4 relative`}>
+            {/* Background line for connection */}
+            <div className="absolute top-1/2 left-4 right-4 h-[2px] bg-white/20 -z-10 -translate-y-1/2 rounded-full" />
 
-        {stepsArray.map((_, index) => {
-          const stepNumber = index + 1;
-          const isActive = currentStep === stepNumber;
-          const isCompleted = currentStep > stepNumber;
+            {stepsArray.map((_, index) => {
+              const stepNumber = index + 1;
+              const isActive = currentStep === stepNumber;
+              const isCompleted = currentStep > stepNumber;
 
-          return (
-            <React.Fragment key={stepNumber}>
-              <div className="relative z-10 p-2 rounded-full backdrop-blur-sm">
-                {renderStepIndicator ? (
-                  renderStepIndicator({
-                    step: stepNumber,
-                    currentStep,
-                    onStepClick: (clicked: number) => {
-                      setDirection(clicked > currentStep ? 1 : -1);
-                      updateStep(clicked);
-                    }
-                  })
-                ) : (
-                  <StepIndicator
-                    step={stepNumber}
-                    disableStepIndicators={disableStepIndicators}
-                    currentStep={currentStep}
-                    onClickStep={(clicked: number) => {
-                      setDirection(clicked > currentStep ? 1 : -1);
-                      updateStep(clicked);
-                    }}
-                  />
-                )}
-              </div>
-            </React.Fragment>
-          );
-        })}
-      </div>
+              return (
+                <React.Fragment key={stepNumber}>
+                  <div className="relative z-10 p-2 rounded-full backdrop-blur-sm">
+                    {renderStepIndicator ? (
+                      renderStepIndicator({
+                        step: stepNumber,
+                        currentStep,
+                        onStepClick: (clicked: number) => {
+                          setDirection(clicked > currentStep ? 1 : -1);
+                          updateStep(clicked);
+                        }
+                      })
+                    ) : (
+                      <StepIndicator
+                        step={stepNumber}
+                        disableStepIndicators={disableStepIndicators}
+                        currentStep={currentStep}
+                        onClickStep={(clicked: number) => {
+                          setDirection(clicked > currentStep ? 1 : -1);
+                          updateStep(clicked);
+                        }}
+                      />
+                    )}
+                  </div>
+                </React.Fragment>
+              );
+            })}
+          </div>
 
-      <div className={`relative min-h-[300px] ${contentClassName}`}>
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={currentStep}
-            custom={direction}
-            initial={{ opacity: 0, x: direction > 0 ? 20 : -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: direction > 0 ? -20 : 20 }}
-            transition={{ duration: 0.3 }}
-            className="w-full"
-          >
-            {stepsArray[currentStep - 1]}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+          <div className={`relative min-h-[300px] ${contentClassName}`}>
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={currentStep}
+                custom={direction}
+                initial={{ opacity: 0, x: direction > 0 ? 20 : -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction > 0 ? -20 : 20 }}
+                transition={{ duration: 0.3 }}
+                className="w-full"
+              >
+                {stepsArray[currentStep - 1]}
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-      {!isCompleted && (
-        <div className={`flex justify-center gap-4 mt-8 ${footerClassName}`}>
-          {currentStep !== 1 && (
+          <div className={`flex justify-center gap-4 mt-8 ${footerClassName}`}>
+            {currentStep !== 1 && (
+              <button
+                onClick={handleBack}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-colors
+                  ${currentStep === 1
+                    ? 'opacity-0 pointer-events-none'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  }`}
+                {...backButtonProps}
+              >
+                {backButtonText}
+              </button>
+            )}
             <button
-              onClick={handleBack}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-colors
-                ${currentStep === 1
-                  ? 'opacity-0 pointer-events-none'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
-              {...backButtonProps}
+              onClick={isLastStep ? handleComplete : handleNext}
+              className="px-8 py-2 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black text-sm font-bold shadow-lg shadow-cyan-500/20 transition-all active:scale-95"
+              {...nextButtonProps}
             >
-              {backButtonText}
+              {isLastStep ? 'Complete' : nextButtonText}
             </button>
-          )}
+          </div>
+        </React.Fragment>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center justify-center text-center py-20"
+        >
+          <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-green-500/30">
+            <CheckIcon className="w-10 h-10 text-white" />
+          </div>
+          <h3 className="text-3xl font-bold text-white mb-4">You're All Set!</h3>
+          <p className="text-gray-400 max-w-sm mb-8">
+            You've explored the basics of Task AI. Ready to create your account and get started?
+          </p>
           <button
-            onClick={isLastStep ? handleComplete : handleNext}
-            className="px-8 py-2 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black text-sm font-bold shadow-lg shadow-cyan-500/20 transition-all active:scale-95"
-            {...nextButtonProps}
+            onClick={() => setCurrentStep(1)}
+            className="px-8 py-3 rounded-full bg-white text-black font-bold hover:bg-gray-200 transition-colors shadow-lg active:scale-95"
           >
-            {isLastStep ? 'Complete' : nextButtonText}
+            Start Again
           </button>
-        </div>
+        </motion.div>
       )}
     </div>
   );
 }
-
-// Removed StepContentWrapper and SlideTransition for simplicity
 
 export function Step({ children }: { children: React.ReactNode }) {
   return <div className="px-4">{children}</div>;
@@ -177,8 +198,6 @@ function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators }
     </motion.div>
   );
 }
-
-
 
 function CheckIcon(props: any) {
   return (
