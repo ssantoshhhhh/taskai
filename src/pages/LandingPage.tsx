@@ -5,8 +5,11 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle2, Zap, Brain, Shield, Clock, UserPlus, CheckSquare, Sparkles, Rocket } from 'lucide-react';
 import Stepper, { Step } from '@/components/ui/Stepper';
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const fadeIn = {
     initial: { opacity: 0, y: 10 },
@@ -92,7 +95,7 @@ export default function LandingPage() {
             {[
               { icon: Brain, title: "AI Smart Planning", desc: "Let our AI analyze your workload and create the perfect schedule for your day automatically." },
               { icon: Zap, title: "Flow State Focus", desc: "Interactive tools to help you maintain deep focus and eliminate distractions while working." },
-              { icon: Clock, title: "Time Tracking", desc: "Effortlessly track where your time goes and get insights to improve your efficiency." }
+              { icon: Sparkles, title: "RAG & Knowledge Base", desc: "Chat with your tasks and notes. Our AI uses RAG to provide context-aware answers instantly." }
             ].map((feature, i) => (
               <motion.div
                 key={i}
@@ -269,9 +272,9 @@ export default function LandingPage() {
             <Button
               size="lg"
               className="h-16 rounded-full px-12 text-xl bg-white text-black hover:bg-gray-200 font-bold transition-transform active:scale-95"
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate(user ? '/dashboard' : '/auth')}
             >
-              Get Started for Free
+              {user ? 'Go to Dashboard' : 'Get Started for Free'}
             </Button>
           </motion.div>
         </section>
