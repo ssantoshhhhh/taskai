@@ -130,9 +130,15 @@ export const pinecone = {
         throw new Error(await response.text());
       }
       console.log('Successfully indexed in Pinecone');
-    } catch (error) {
+    } catch (error: any) {
+      // If API key is missing, just warn and skip, don't crash the UI with a Toast
+      if (error.message && error.message.includes("Missing VITE_LOVABLE_API_KEY")) {
+        console.warn("Skipping Pinecone indexing: Missing Embedding API Key.");
+        return;
+      }
+
       console.error("Pinecone Indexing Error:", error);
-      throw error; // Re-throw to show in Toast
+      throw error; // Re-throw to show in Toast for other errors
     }
   },
 

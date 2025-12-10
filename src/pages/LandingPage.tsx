@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle2, Zap, Brain, Shield, Clock, UserPlus, CheckSquare, Sparkles, Rocket } from 'lucide-react';
 import Stepper, { Step } from '@/components/ui/Stepper';
@@ -10,6 +12,26 @@ import { useAuth } from '@/context/AuthContext';
 export default function LandingPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [latestTasks, setLatestTasks] = useState<any[]>([]);
+  const [loadingTasks, setLoadingTasks] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setLoadingTasks(true);
+      const fetchTasks = async () => {
+        const { data } = await supabase
+          .from('tasks')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(3);
+
+        if (data) setLatestTasks(data);
+        setLoadingTasks(false);
+      };
+      fetchTasks();
+    }
+  }, [user]);
 
   const fadeIn = {
     initial: { opacity: 0, y: 10 },
@@ -186,6 +208,10 @@ export default function LandingPage() {
         </section>
 
         {/* Showcase Section */}
+
+
+
+        {/* Showcase Section */}
         <section className="grid md:grid-cols-2 gap-12 md:gap-16 items-center py-10 md:py-20 px-4">
           <motion.div {...fadeIn} className="space-y-6 md:space-y-8 order-2 md:order-1">
             <h2 className="text-3xl md:text-6xl font-bold text-white leading-tight">
@@ -233,22 +259,50 @@ export default function LandingPage() {
             <div className="relative bg-[#0F0F0F] border border-white/10 rounded-2xl p-6 shadow-2xl">
               {/* Mock Card UI */}
               <div className="flex items-center gap-4 mb-6 border-b border-white/5 pb-4">
-                <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold">AI</div>
+                <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold">
+                  {user ? <CheckCircle2 className="w-6 h-6" /> : "AI"}
+                </div>
                 <div>
-                  <div className="font-bold text-white">Daily Plan</div>
-                  <div className="text-xs text-gray-500">Generated just now</div>
+                  <div className="font-bold text-white">{user ? 'My Tasks' : 'Daily Plan'}</div>
+                  <div className="text-xs text-gray-500">{user ? 'Latest updates' : 'Generated just now'}</div>
                 </div>
               </div>
               <div className="space-y-3">
-                {[1, 2, 3].map((_, i) => (
-                  <div key={i} className="h-16 bg-white/5 rounded-xl border border-white/5 flex items-center px-4 gap-3">
-                    <div className="w-5 h-5 rounded-full border border-gray-600" />
-                    <div className="flex-1 space-y-2">
-                      <div className="h-2 bg-white/10 rounded w-3/4" />
-                      <div className="h-2 bg-white/5 rounded w-1/2" />
+                {user && !loadingTasks ? (
+                  latestTasks.length > 0 ? (
+                    latestTasks.map((task) => (
+                      <div key={task.id} className="h-16 bg-white/5 rounded-xl border border-white/5 flex items-center px-4 gap-3">
+                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${task.status === 'done' ? 'bg-cyan-500/20 border-cyan-500' : 'border-gray-600'}`}>
+                          {task.status === 'done' && <div className="w-2.5 h-2.5 bg-cyan-500 rounded-full" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-white text-sm truncate">{task.title}</div>
+                          <div className="text-xs text-gray-500 mt-1 truncate">
+                            {task.description || 'No description'}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="h-48 flex flex-col items-center justify-center text-center p-4">
+                      <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-3">
+                        <Sparkles className="w-6 h-6 text-gray-500" />
+                      </div>
+                      <p className="text-gray-400 font-medium">No tasks found</p>
+                      <p className="text-xs text-gray-600 mt-1">Add a task to see it here!</p>
                     </div>
-                  </div>
-                ))}
+                  )
+                ) : (
+                  [1, 2, 3].map((_, i) => (
+                    <div key={i} className="h-16 bg-white/5 rounded-xl border border-white/5 flex items-center px-4 gap-3">
+                      <div className="w-5 h-5 rounded-full border border-gray-600" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-2 bg-white/10 rounded w-3/4" />
+                        <div className="h-2 bg-white/5 rounded w-1/2" />
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </motion.div>
@@ -261,7 +315,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-neutral-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-10 md:p-24 relative overflow-hidden"
+            className="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-black/40 backdrop-blur-xl p-8 md:p-12 relative overflow-hidden shadow-2xl"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
 
@@ -277,9 +331,9 @@ export default function LandingPage() {
               {user ? 'Go to Dashboard' : 'Login to Continue'}
             </Button>
           </motion.div>
-        </section>
+        </section >
 
-      </div>
+      </div >
     </AppLayout >
   );
 }

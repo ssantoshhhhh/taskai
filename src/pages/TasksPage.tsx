@@ -306,6 +306,7 @@ export default function TasksPage() {
                   <Label htmlFor="title">Title *</Label>
                   <Input
                     id="title"
+                    autoFocus
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="Task title"
