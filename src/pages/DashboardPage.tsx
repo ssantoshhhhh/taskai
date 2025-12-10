@@ -172,7 +172,7 @@ export default function DashboardPage() {
     <AppLayout>
       <div className="space-y-8 animate-fade-in pb-20 max-w-7xl mx-auto">
         {/* Hero Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-white/5 pb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-white/5 pb-8">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
               Dashboard
