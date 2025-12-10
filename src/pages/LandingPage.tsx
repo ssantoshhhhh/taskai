@@ -11,7 +11,7 @@ export default function LandingPage() {
     initial: { opacity: 0, y: 10 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-10%" },
-    transition: { duration: 0.5, ease: "easeOut" }
+    transition: { duration: 0.5, ease: "easeOut" as const }
   };
 
   const staggerContainer = {
@@ -79,7 +79,7 @@ export default function LandingPage() {
         <section id="features" className="relative px-4">
           <div className="text-center mb-10 md:mb-16">
             <motion.h2 {...fadeIn} className="text-3xl md:text-5xl font-bold mb-4 text-white">Powerful Features</motion.h2>
-            <motion.p {...fadeIn} className="text-gray-400 max-w-2xl mx-auto">Everything you need to stay productive, supercharged by AI.</motion.p>
+            <motion.p {...fadeIn} className="text-gray-300 max-w-2xl mx-auto">Everything you need to stay productive, supercharged by AI.</motion.p>
           </div>
 
           <motion.div
@@ -100,14 +100,14 @@ export default function LandingPage() {
                   hidden: { opacity: 0, y: 10 },
                   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 50, damping: 15 } }
                 }}
-                className="group p-8 rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-cyan-500/30 transition-colors duration-300 relative overflow-hidden"
+                className="group p-8 rounded-3xl bg-neutral-900/90 border border-white/10 hover:border-cyan-500/30 transition-colors duration-300 relative overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 <div className="w-14 h-14 bg-neutral-800 rounded-2xl flex items-center justify-center mb-6 border border-white/5">
                   <feature.icon className="w-7 h-7 text-cyan-400" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-3 relative z-10">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed relative z-10">{feature.desc}</p>
+                <p className="text-gray-300 leading-relaxed relative z-10">{feature.desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -193,7 +193,7 @@ export default function LandingPage() {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
 
             <h2 className="text-3xl md:text-6xl font-bold text-white mb-6">Ready to take control?</h2>
-            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10">
               Join thousands of users who have transformed their productivity with Task AI.
             </p>
             <Button
