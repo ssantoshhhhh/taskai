@@ -39,7 +39,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="relative z-10 max-w-4xl will-change-transform"
+            className="relative z-10 max-w-4xl"
           >
             <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-white/10 bg-white/5 text-sm text-cyan-300 font-medium">
               ✨ The Next Gen Task Management
@@ -218,7 +218,8 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             className="relative order-1 md:order-2"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-purple-500/10 blur-[40px] rounded-full pointer-events-none" />
+            {/* Removed heavy blur gradient */}
+            <div className="absolute inset-0 bg-cyan-500/5 rounded-3xl -z-10" />
             <div className="relative bg-[#0F0F0F] border border-white/10 rounded-2xl p-6 shadow-2xl">
               {/* Mock Card UI */}
               <div className="flex items-center gap-4 mb-6 border-b border-white/5 pb-4">

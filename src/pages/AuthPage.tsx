@@ -135,6 +135,13 @@ export default function AuthPage() {
         />
       </div>
 
+      {/* Navigation Button */}
+      <div className="absolute top-4 left-4 z-20">
+        <Button variant="ghost" className="text-gray-400 hover:text-white hover:bg-white/10" onClick={() => navigate('/')}>
+          ← Back to Task AI
+        </Button>
+      </div>
+
       <div className="w-full max-w-md animate-fade-in relative z-10 p-4">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">

@@ -265,7 +265,7 @@ export function ChatWidget() {
             : "bg-gradient-to-r from-purple-600 to-pink-600 text-white animate-pulse-slow"
         )}
       >
-        {isOpen ? <X className="w-6 h-6" /> : <img src={botLogo} alt="AI" className="w-10 h-10 object-contain drop-shadow-sm transition-transform hover:scale-110" />}
+        {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-7 h-7" />}
       </Button>
     </div>
   );
