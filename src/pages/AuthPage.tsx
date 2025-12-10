@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Mail, Lock, User, KeyRound } from 'lucide-react';
 import taskAiLogo from '@/assets/taskai-logo.png';
 import { z } from 'zod';
-import FloatingLines from '@/components/ui/FloatingLines';
+import { GridScan } from '@/components/ui/GridScan';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -122,16 +122,19 @@ export default function AuthPage() {
     <div className="min-h-screen relative overflow-hidden bg-black flex items-center justify-center">
       {/* Background Animation */}
       <div className="absolute inset-0 z-0">
-        <FloatingLines
-          enabledWaves={['top', 'middle', 'bottom']}
-          lineCount={[10, 15, 20]}
-          lineDistance={[8, 6, 4]}
-          bendRadius={5.0}
-          bendStrength={-0.5}
-          interactive={true}
-          parallax={true}
-          linesGradient={['#ff00ff', '#0000ff']}
-          mixBlendMode="screen"
+        <GridScan
+          sensitivity={0.55}
+          lineThickness={1}
+          linesColor="#392e4e"
+          gridScale={0.1}
+          scanColor="#FF9FFC"
+          scanOpacity={0.4}
+          enablePost
+          bloomIntensity={0.6}
+          chromaticAberration={0.002}
+          noiseIntensity={0.01}
+          className="w-full h-full"
+          style={{}}
         />
       </div>
 
