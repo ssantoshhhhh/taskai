@@ -120,7 +120,15 @@ export default function LandingPage() {
             <motion.p {...fadeIn} className="text-gray-300 max-w-2xl mx-auto">Get started with Task AI in just a few simple steps.</motion.p>
           </div>
 
-          <div className="max-w-4xl mx-auto bg-neutral-900/50 border border-white/5 rounded-3xl p-4 md:p-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-black/40 backdrop-blur-xl p-8 md:p-12 relative overflow-hidden shadow-2xl"
+          >
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
+
             <Stepper
               initialStep={1}
               onStepChange={(step: number) => {
@@ -129,14 +137,14 @@ export default function LandingPage() {
               onFinalStepCompleted={() => console.log("All steps completed!")}
               backButtonText="Previous"
               nextButtonText="Next"
-              stepCircleContainerClassName="shadow-none border-0 bg-transparent"
-              stepContainerClassName="bg-transparent mb-8"
+              stepCircleContainerClassName="shadow-none border-0 bg-transparent mb-8"
+              stepContainerClassName="bg-transparent"
               contentClassName="min-h-[200px]"
               footerClassName="bg-transparent"
             >
               <Step>
                 <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-16 h-16 bg-cyan-500/10 text-cyan-400 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-cyan-500/20 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
                     <UserPlus className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-bold text-white">1. Create an Account</h2>
@@ -145,7 +153,7 @@ export default function LandingPage() {
               </Step>
               <Step>
                 <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-purple-500/20 text-purple-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-16 h-16 bg-purple-500/10 text-purple-400 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.15)]">
                     <CheckSquare className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-bold text-white">2. Add Your Tasks</h2>
@@ -154,7 +162,7 @@ export default function LandingPage() {
               </Step>
               <Step>
                 <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-16 h-16 bg-green-500/10 text-green-400 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-green-500/20 shadow-[0_0_20px_rgba(34,197,94,0.15)]">
                     <Sparkles className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-bold text-white">3. Generate Your Plan</h2>
@@ -163,7 +171,7 @@ export default function LandingPage() {
               </Step>
               <Step>
                 <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-pink-500/20 text-pink-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-16 h-16 bg-pink-500/10 text-pink-400 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-pink-500/20 shadow-[0_0_20px_rgba(236,72,153,0.15)]">
                     <Rocket className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-bold text-white">4. Achieve Flow State</h2>
@@ -171,7 +179,7 @@ export default function LandingPage() {
                 </div>
               </Step>
             </Stepper>
-          </div>
+          </motion.div>
         </section>
 
         {/* Showcase Section */}
@@ -250,7 +258,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-neutral-900 border border-white/10 rounded-3xl p-10 md:p-24 relative overflow-hidden"
+            className="bg-neutral-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-10 md:p-24 relative overflow-hidden"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
 
