@@ -21,7 +21,6 @@ import {
   Clock,
   AlertCircle,
   Calendar,
-  RefreshCw,
   List,
   LayoutGrid,
 } from 'lucide-react';
@@ -50,7 +49,8 @@ export default function TasksPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [saving, setSaving] = useState(false);
-  const [syncing, setSyncing] = useState(false);
+
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -110,32 +110,7 @@ export default function TasksPage() {
     setDialogOpen(true);
   };
 
-  const syncAllTasks = async () => {
-    setSyncing(true);
-    toast({ title: "Sync Started", description: "This may take a while to respect API limits..." });
-    try {
-      const { data: allTasks } = await supabase.from('tasks').select('*');
-      if (allTasks) {
-        let count = 0;
-        for (const task of allTasks) {
-          // Index the task
-          await pinecone.indexTask(task);
-          count++;
 
-          // Add a 5-second delay to avoid Google API Rate Limits (429) - 12 requests/min
-          if (count < allTasks.length) {
-            await new Promise(resolve => setTimeout(resolve, 5000));
-          }
-        }
-        toast({ title: `Successfully synced ${count} tasks to AI memory!` });
-      }
-    } catch (error: any) {
-      console.error("Sync Error:", error);
-      toast({ title: 'Sync failed', description: error.message, variant: 'destructive' });
-    } finally {
-      setSyncing(false);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -269,10 +244,7 @@ export default function TasksPage() {
               <h1 className="text-3xl font-bold">Tasks</h1>
               <p className="text-muted-foreground">Manage your tasks and stay productive</p>
             </div>
-            <Button variant="outline" size="sm" onClick={syncAllTasks} disabled={syncing} className="hidden sm:flex">
-              <RefreshCw className={`w-4 h-4 mr-2 ${syncing ? 'animate-spin' : ''}`} />
-              {syncing ? 'Syncing...' : 'Sync Tasks'}
-            </Button>
+
           </div>
 
           <Dialog open={dialogOpen} onOpenChange={(open) => {

@@ -15,8 +15,11 @@ import {
   Loader2,
   Zap,
   Target,
-  Calendar
+  Calendar,
+  Copy,
+  FilePlus,
 } from 'lucide-react';
+import { pinecone } from '@/lib/pinecone';
 import StarBorder from '@/components/ui/StarBorder';
 import { cn } from '@/lib/utils';
 
@@ -155,6 +158,50 @@ export default function DashboardPage() {
     }
   };
 
+  const copyPlanToClipboard = () => {
+    if (!latestPlan) return;
+    navigator.clipboard.writeText(latestPlan.generated_text);
+    toast({
+      title: 'Copied!',
+      description: 'Plan copied to clipboard.',
+    });
+  };
+
+  const savePlanToNotes = async () => {
+    if (!latestPlan) return;
+
+    try {
+      const { data: noteData, error } = await supabase
+        .from('notes')
+        .insert({
+          user_id: user!.id,
+          content: `AI Generated Plan (${new Date().toLocaleDateString()}):\n\n${latestPlan.generated_text}`,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (noteData) {
+        await pinecone.indexNote({
+          id: noteData.id,
+          content: noteData.content
+        });
+      }
+
+      toast({
+        title: 'Saved to Notes',
+        description: 'Plan has been added to your notes.',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to save plan to notes.',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const StatCard = ({ icon: Icon, label, value, colorClass }: { icon: any, label: string, value: number, colorClass: string }) => (
     <div className="relative group overflow-hidden rounded-2xl bg-black/20 border border-white/5 p-6 hover:bg-black/30 transition-all duration-300">
       <div className={`absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity ${colorClass}`}>
@@ -256,6 +303,14 @@ export default function DashboardPage() {
                     <span className="text-xs font-mono text-cyan-400/80">
                       GENERATED PLAN • {new Date(latestPlan.created_at).toLocaleTimeString()}
                     </span>
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="icon" onClick={copyPlanToClipboard} className="h-6 w-6 hover:bg-white/10" title="Copy to Clipboard">
+                        <Copy className="w-3 h-3 text-gray-400" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={savePlanToNotes} className="h-6 w-6 hover:bg-white/10" title="Save as Note">
+                        <FilePlus className="w-3 h-3 text-gray-400" />
+                      </Button>
+                    </div>
                   </div>
                   <div className="prose prose-invert prose-sm max-w-none">
                     <p className="whitespace-pre-wrap text-gray-300 font-light leading-relaxed">

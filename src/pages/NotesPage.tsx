@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Note } from '@/types/database';
-import { Plus, Trash2, Loader2, FileText, Database, RefreshCw, Pencil, X } from 'lucide-react';
+import { Plus, Trash2, Loader2, FileText, Database, Pencil, X, Sparkles } from 'lucide-react';
 import { pinecone } from '@/lib/pinecone';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import Cubes from '@/components/ui/Cubes';
@@ -19,7 +19,7 @@ export default function NotesPage() {
   const [loading, setLoading] = useState(true);
   const [newNote, setNewNote] = useState('');
   const [saving, setSaving] = useState(false);
-  const [syncing, setSyncing] = useState(false);
+
 
   // Dialog State
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
@@ -148,6 +148,29 @@ export default function NotesPage() {
     }
   };
 
+  const importLatestPlan = async () => {
+    try {
+      const { data: latestPlan, error } = await supabase
+        .from('plans')
+        .select('generated_text')
+        .eq('user_id', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (latestPlan && latestPlan.generated_text) {
+        setNewNote(latestPlan.generated_text);
+        toast({ title: 'Plan imported to editor!' });
+      } else {
+        toast({ title: 'No recent plan found.' });
+      }
+    } catch (error) {
+      toast({ title: 'Failed to import plan.', variant: 'destructive' });
+    }
+  };
+
   const deleteNote = async (id: string) => {
     try {
       const { error } = await supabase
@@ -174,36 +197,7 @@ export default function NotesPage() {
     }
   };
 
-  const syncAllNotes = async () => {
-    setSyncing(true);
-    toast({ title: "Sync Started", description: "This may take a while to respect API limits..." });
-    try {
-      const { data: allNotes } = await supabase.from('notes').select('*');
-      if (allNotes) {
-        let count = 0;
-        for (const note of allNotes) {
-          // Index the note
-          await pinecone.indexNote({ id: note.id, content: note.content });
-          count++;
 
-          // Add a 5-second delay to avoid Google API Rate Limits (429) - 12 requests/min
-          if (count < allNotes.length) {
-            await new Promise(resolve => setTimeout(resolve, 5000));
-          }
-        }
-        toast({ title: `Successfully synced ${count} notes to AI memory!` });
-      }
-    } catch (error: any) {
-      console.error("Sync Error:", error);
-      toast({
-        title: 'Sync failed',
-        description: error.message || "Check console for details",
-        variant: 'destructive'
-      });
-    } finally {
-      setSyncing(false);
-    }
-  };
 
   return (
     <AppLayout>
@@ -221,11 +215,9 @@ export default function NotesPage() {
               <Database className="w-4 h-4 text-primary" />
               <div className="text-xs">
                 <span className="font-semibold block">AI Context Enabled</span>
-                <span className="text-muted-foreground">Notes sync to Pinecone</span>
+
               </div>
-              <Button variant="ghost" size="icon" className="ml-2 h-8 w-8" onClick={syncAllNotes} disabled={syncing}>
-                <RefreshCw className={`w-3.5 h-3.5 ${syncing ? 'animate-spin' : ''}`} />
-              </Button>
+
             </CardContent>
           </Card>
         </div>
@@ -234,11 +226,15 @@ export default function NotesPage() {
         <div className="relative group">
           <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl opacity-20 group-hover:opacity-40 transition duration-500 blur"></div>
           <Card className="relative bg-background/80 backdrop-blur-xl border-white/10 shadow-xl">
-            <CardHeader className="pb-2 pt-4 px-4">
+            <CardHeader className="pb-2 pt-4 px-4 flex flex-row items-center justify-between">
               <CardTitle className="text-sm font-medium text-cyan-400 uppercase tracking-widest flex items-center gap-2">
                 <Plus className="w-4 h-4" />
                 Create New Note
               </CardTitle>
+              <Button variant="ghost" size="sm" onClick={importLatestPlan} className="h-6 text-xs text-purple-400 hover:text-purple-300 hover:bg-purple-900/20">
+                <Sparkles className="w-3 h-3 mr-1" />
+                Import AI Plan
+              </Button>
             </CardHeader>
             <CardContent className="p-4 pt-0">
               <Textarea
