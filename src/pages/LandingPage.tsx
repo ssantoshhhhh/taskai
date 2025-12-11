@@ -70,7 +70,7 @@ export default function LandingPage() {
             </div>
             <h1 className="text-4xl md:text-8xl font-bold tracking-tight text-white pb-4 leading-tight">
               Master Your Time.<br />
-              <span className="text-cyan-400">Amplify Focus.</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-200 to-blue-400 drop-shadow-lg">Amplify Focus.</span>
             </h1>
             <p className="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto mt-4 leading-relaxed">
               Uses advanced AI to organize your tasks, schedule your day, and help you achieve flow state effortlessly.
@@ -91,7 +91,7 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="h-14 rounded-full px-10 text-lg border-white/10 bg-white/5 hover:bg-white/10 text-white backdrop-blur-md transition-transform active:scale-95"
+                className="h-14 rounded-full px-10 text-lg border-white/20 bg-black/40 hover:bg-black/60 text-white backdrop-blur-md transition-all active:scale-95 shadow-xl shadow-black/20"
                 onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Learn More
