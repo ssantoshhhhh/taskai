@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { MessageCircle, X, Send, Loader2, Bot, User } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, Bot, User, Mic } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import botLogo from '../../assets/taskai-bot-removebg.png';
 
@@ -28,7 +28,56 @@ export function ChatWidget() {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = true;
+
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = Array.from(event.results)
+          .map((result: any) => result[0])
+          .map((result) => result.transcript)
+          .join('');
+        setInputValue(prev => {
+          // If we are appending, we might want to handle spacing, but for now direct set or replace
+          // Let's just set it to the interim result if current input is empty, or append?
+          // Usually standard behavior is to replace or append.
+          // Let's go with append if we want "continuous" feel, but since continuous=false, it stops after one sentence.
+          // Let's simplisticly set it.
+          return transcript;
+        });
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('Speech recognition error', event.error);
+        setIsListening(false);
+      };
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    } else {
+      if (recognitionRef.current) {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } else {
+        alert('Speech recognition is not supported in this browser.');
+      }
+    }
+  };
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -238,17 +287,31 @@ export function ChatWidget() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyPress}
-                className="flex-1 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus-visible:ring-cyan-500/50 pr-10"
+                className="flex-1 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus-visible:ring-cyan-500/50 pr-20"
                 disabled={isLoading}
               />
-              <Button
-                size="icon"
-                onClick={handleSendMessage}
-                disabled={isLoading || !inputValue.trim()}
-                className="absolute right-1 top-1 h-8 w-8 bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-90 transition-opacity rounded-md"
-              >
-                <Send className="w-4 h-4" />
-              </Button>
+              <div className="absolute right-1 top-1 flex gap-1">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={toggleListening}
+                  disabled={isLoading}
+                  className={cn(
+                    "h-8 w-8 hover:bg-white/10 rounded-md transition-colors",
+                    isListening ? "text-red-500 animate-pulse bg-red-500/10" : "text-gray-400"
+                  )}
+                >
+                  <Mic className="w-4 h-4" />
+                </Button>
+                <Button
+                  size="icon"
+                  onClick={handleSendMessage}
+                  disabled={isLoading || !inputValue.trim()}
+                  className="h-8 w-8 bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-90 transition-opacity rounded-md"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           </CardFooter>
         </Card>
